@@ -1,0 +1,41 @@
+---
+# tasks file for prometheus-exporter
+
+- name: prometheus_exporter | ensure Prometheus exporters directory exist
+  file:
+    path: "{{ prometheus_exporter_install_dir }}/{{ item.name }}"
+    state: directory
+  loop: "{{ prometheus_exporter_list }}"
+
+- name: prometheus_exporter | download Exporter
+  unarchive:
+    remote_src: true
+    src: "{{ item.download_url }}"
+    dest: "{{ prometheus_exporter_install_dir }}/{{ item.name }}"
+    extra_opts: "--strip-components=1"
+  loop: "{{ prometheus_exporter_list }}"
+  register: download_exporter_status   
+
+- name: prometheus_exporter | create systemd unit
+  template:
+    src: exporter-service.j2
+    dest: "/etc/systemd/system/{{ item.name }}_exporter.service"
+    mode: 0600
+  loop: "{{ prometheus_exporter_list }}"
+  register: systemd_unit_status
+
+- name: prometheus_exporter | restart exporter exporter
+  systemd:
+    name: "{{ item.name }}_exporter.service"
+    state: restarted
+    daemon_reload: true
+  loop: "{{ prometheus_exporter_list }}"
+  when: systemd_unit_status.changed or download_exporter_status.changed
+
+- name: prometheus_exporter | make sure Exporter is started
+  service:
+    name: "{{ item.name }}_exporter.service"
+    state: started
+    enabled: true
+    daemon_reload: true
+  loop: "{{ prometheus_exporter_list }}"

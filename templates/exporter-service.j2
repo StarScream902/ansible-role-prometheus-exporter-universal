@@ -1,0 +1,10 @@
+[Unit]
+Description={{ item.name }} Exporter
+After=network.target
+
+[Service]
+ExecStart={{ prometheus_exporter_install_dir }}/{{ item.name }}/{{ item.name }}_exporter \
+{{ item.exec_params }}
+
+[Install]
+WantedBy=multi-user.target
