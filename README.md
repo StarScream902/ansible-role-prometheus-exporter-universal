@@ -1,13 +1,14 @@
 Prometheus exporter setup role
 =========
 
+!!! This role can work with exporters which have been written in similar way as [classicals](https://prometheus.io/docs/instrumenting/exporters/)
 This role installs and configures Prometheus exporters as a systemd service
 
 Role Variables
 --------------
 
 ```yaml
-prometheus_exporter_install_dir: "/opt/prometheus_exporters" # directory whe exporters will be hosting
+prometheus_exporter_install_dir: "/opt/prometheus_exporters" # directory where exporters will be hosted
 
 prometheus_exporter_list:
 - name: elasticsearch # exporter name
