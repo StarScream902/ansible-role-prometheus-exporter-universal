@@ -1,7 +1,8 @@
 Prometheus exporter setup role
 =========
 
-!!! This role can work with exporters which have been written in similar way as [classicals](https://prometheus.io/docs/instrumenting/exporters/)
+!!! This role can work with exporters which have been written in similar way as [classicals](https://prometheus.io/docs/instrumenting/exporters/) only
+
 This role installs and configures Prometheus exporters as a systemd service
 
 Role Variables
